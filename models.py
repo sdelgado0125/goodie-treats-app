@@ -3,13 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-
-def connect_db(app):
-    """Connect to database."""
-
-    db.app = app
-    db.init_app(app)
-    
 class User(db.Model):
     __tablename__ = 'user'
 
@@ -75,3 +68,10 @@ class Follow(db.Model):
     followed_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     follower = db.relationship('User', foreign_keys=[follower_id])
     followed = db.relationship('User', foreign_keys=[followed_id])
+    
+    
+def connect_db(app):
+    """Connect to database."""
+
+    db.app = app
+    db.init_app(app)

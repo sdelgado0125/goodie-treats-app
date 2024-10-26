@@ -1,10 +1,9 @@
 import os
 from functools import wraps
 from flask import Flask, render_template, request, redirect, session, flash, g
-from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
-from models import connect_db, User, Pet, Product, Recipe, Review, Follow  # Ensure Pet is imported from your models
+from models import connect_db, db, User, Pet, Product, Recipe, Review, Follow 
 
 app = Flask(__name__)
 
