@@ -4,17 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>Goodie Treats - Homepage</title>
+    <title>Goodie Treats</title>
 </head>
 <body>
     <header>
-        <h1>Welcome to Goodie Treats!</h1>
-        <nav>
+        <h1 class="">Goodie Treats</h1>
+
+        <nav class="nav-bar">
             <a href="/">Home</a>
-            <a href="/login">Login</a>
-            <a href="/products">Products</a>
+            <a href="/products">Brands</a>
+            <a href="/recipes">Recipes</a>
             
+            {% if user %}
+                <span class="username">Hello, {{ user.username }}!</span>
+                <a href="/logout">Logout</a>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            {% endif %}
         </nav>
+        
+        <h2>Welcome to Goodie Treats!</h2>
     </header>
     <main>
         {% block content %}
