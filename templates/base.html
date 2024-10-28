@@ -7,14 +7,17 @@
     <title>Goodie Treats</title>
 </head>
 <body>
-    <header>
-        <h1 class="">Goodie Treats</h1>
+    <div class="container">
+        <header class="site-header">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Goodie Treats Logo" class="logo">
+
+        </header>
 
         <nav class="nav-bar">
             <a href="/">Home</a>
             <a href="/products">Brands</a>
             <a href="/recipes">Recipes</a>
-            
+
             {% if user %}
                 <span class="username">Hello, {{ user.username }}!</span>
                 <a href="/logout">Logout</a>
@@ -23,16 +26,17 @@
                 <a href="/register">Register</a>
             {% endif %}
         </nav>
-        
-        <h2>Welcome to Goodie Treats!</h2>
-    </header>
-    <main>
-        {% block content %}
 
-        {% endblock %}
-    </main>
-    <footer>
-        <p>&copy; 2024 Goodie Treats</p>
-    </footer>
+        <h2>Welcome to Goodie Treats!</h2>
+
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Goodie Treats</p>
+        </footer>
+    </div>
 </body>
 </html>

@@ -3,7 +3,8 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-    <h1>Login</h1>
+<div class="login-container">
+    <h1 class="login-title">Login</h1>
 
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
@@ -13,7 +14,7 @@
         {% endif %}
     {% endwith %}
 
-    <form action="/login" method="POST">
+    <form action="/login" method="POST" class="login-form">
         <label for="username">Username:</label>
         <input type="text" name="username" required>
         <br>
@@ -22,5 +23,6 @@
         <br>
         <button type="submit">Login</button>
     </form>
-    <p>Don't have an account? <a href="/register">Register here</a>.</p>
+    <p class="reigster-link">Don't have an account? <a href="/register">Register here</a>.</p>
+</div>
 {% endblock %}

@@ -3,21 +3,21 @@
 {% block title %}Register down below{% endblock %}
 
 {% block content %}
-
-    <h1>Register</h1>
-    <form action="/register" method="POST">
+<div class="register-container">
+    <h1 class="register-title">Register</h1>
+    <form action="/register" method="POST" class="register-form">  <!-- Use 'register-form' for styling -->
         <label for="username">Username:</label>
         <input type="text" name="username" required>
-        <br>
+        
         <label for="email">Email:</label>
         <input type="email" name="email" required>
-        <br>
+        
         <label for="password">Password:</label>
         <input type="password" name="password" required>
-        <br>
+        
         <button type="submit">Register</button>
     </form>
-    <p>Already have an account? <a href="/login">Login here</a>.</p>
-
-
+    
+    <p class="login-link">Already have an account? <a href="/login">Login here</a>.</p> <!-- Added a class for styling -->
+</div>
 {% endblock %}
