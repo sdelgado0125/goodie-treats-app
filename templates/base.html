@@ -14,17 +14,20 @@
         </header>
 
         <nav class="nav-bar">
-            <a href="/">Home</a>
-            <a href="/products">Brands</a>
-            <a href="/recipes">Recipes</a>
-
-            {% if user %}
-                <span class="username">Hello, {{ user.username }}!</span>
-                <a href="/logout">Logout</a>
-            {% else %}
-                <a href="/login">Login</a>
-                <a href="/register">Register</a>
-            {% endif %}
+            <div class="navbar-left">
+                <a href="/">Home</a>
+                <a href="/products">Brands</a>
+                <a href="/recipes">Recipes</a>
+            </div>
+            <div class="navbar-right">
+                {% if user %}
+                    <a href="/dashboard"><span class="username">Hello, {{ user.username }}!</span></a>
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                {% endif %}
+            </div>
         </nav>
 
         <h2>Welcome to Goodie Treats!</h2>

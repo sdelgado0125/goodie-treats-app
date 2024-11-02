@@ -10,20 +10,20 @@ class User(db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
-    first_name = db.Column(db.String(150))  # New field
-    last_name = db.Column(db.String(150))   # New field
-    image = db.Column(db.String(150))        # New field for image path
+    first_name = db.Column(db.String(150)) 
+    last_name = db.Column(db.String(150))
+    image = db.Column(db.String(150))  
     recipes = db.relationship('Recipe', backref='author', lazy=True)
+    favorite_recipes = db.relationship('Recipe', secondary='favorite_recipe', back_populates='favorited_by')
 
-    followers = db.relationship('Follow', foreign_keys='Follow.followed_id', backref='followed', lazy='dynamic')
-    following = db.relationship('Follow', foreign_keys='Follow.follower_id', backref='follower', lazy='dynamic')
-
+    followers = db.relationship('Follow', foreign_keys='Follow.follower_id', backref='follower_user', lazy='dynamic', overlaps="follower")
+    following = db.relationship('Follow', foreign_keys='Follow.followed_id', backref='followed_user', lazy='dynamic', overlaps="followed")
 class Pet(db.Model):
     __tablename__ = 'pet'
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    pet_type = db.Column(db.String(50), nullable=False)  # Dog or Cat
+    pet_type = db.Column(db.String(50), nullable=False)
     name = db.Column(db.String(150), nullable=False)
     breed = db.Column(db.String(150), nullable=False)
     age = db.Column(db.Integer, nullable=False)
@@ -50,6 +50,16 @@ class Recipe(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
+    favorited_by = db.relationship('User', secondary='favorite_recipe', back_populates='favorite_recipes')
+    
+class FavoriteRecipe(db.Model):
+    __tablename__ = 'favorite_recipe'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
+
+
 class Review(db.Model):
     __tablename__= 'review'
 
@@ -66,9 +76,8 @@ class Follow(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     follower_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     followed_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    follower = db.relationship('User', foreign_keys=[follower_id])
-    followed = db.relationship('User', foreign_keys=[followed_id])
-    
+    follower = db.relationship('User', foreign_keys=[follower_id], overlaps="followers")
+    followed = db.relationship('User', foreign_keys=[followed_id], overlaps="following")
     
 def connect_db(app):
     """Connect to database."""

@@ -1,11 +1,7 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Recipes</h1>
-
-<a href="{{ url_for('create_recipe') }}">Create Recipe</a> | 
-<a href="{{ url_for('favorite_recipe') }}">Favorite Recipe</a>
+<h1>Favorite Recipes</h1>
 
 {% for recipe in recipes %}
     <div>

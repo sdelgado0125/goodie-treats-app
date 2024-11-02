@@ -1,9 +1,9 @@
 import os
 from functools import wraps
-from flask import Flask, render_template, request, redirect, session, flash, g
+from flask import Flask, render_template, request, redirect, session, flash, g, url_for
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
-from models import connect_db, db, User, Pet, Product, Recipe, Review, Follow 
+from models import connect_db, db, User, Pet, Product, Recipe, Review, Follow, FavoriteRecipe
 
 app = Flask(__name__)
 
@@ -57,8 +57,21 @@ def login():
         else:
             flash("Invalid username or password.", "danger")  # This flashes an error message
 
-    # This will render the login.html and include any flashed messages
     return render_template('login.html')
+
+@app.route('/dashboard')
+def dashboard():
+    if 'username' not in session:
+        return redirect('/login')  # Redirect to login if not logged in
+    
+    username = session['username']
+    user_data = get_user_data(username)
+    
+    return render_template('dashboard.html', username=username, 
+                           recipes_count=user_data['recipes_count'], 
+                           products_count=user_data['products_count'], 
+                           featured_products=user_data['featured_products'])
+
 
 @app.route('/logout')
 def logout():
@@ -99,28 +112,25 @@ def user_info():
         last_name = request.form['last_name'].strip()
         image = request.files.get('image')
 
-        # Validate user input
         if not first_name or not last_name:
             flash("First name and last name are required.", "danger")
             return redirect('/user_info')
 
-        # Handle image upload
         image_path = ''
         if image:
-            filename = secure_filename(image.filename)  # Sanitize filename
-            if filename:  # Ensure file has a valid name
+            filename = secure_filename(image.filename)
+            if filename: 
                 image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 try:
-                    image.save(image_path)  # Save the image to the upload folder
+                    image.save(image_path)
                 except Exception as e:
                     flash(f"Image upload failed: {e}", "danger")
                     return redirect('/user_info')
 
-        # Update user information
         user = User.query.get(session['user_id'])
         user.first_name = first_name
         user.last_name = last_name
-        user.image = image_path if image_path else user.image  # Keep the old image if no new one
+        user.image = image_path if image_path else user.image 
 
         pet_type = request.form['pet_type'].strip()
         name = request.form['name'].strip()
@@ -132,7 +142,6 @@ def user_info():
             flash("A pet with the same name and type already exists.", "danger")
             return redirect('/user_info')
 
-        # Add new pet information
         new_pet = Pet(
             user_id=user.id,
             pet_type=pet_type,
@@ -166,16 +175,41 @@ def recipes():
         flash("You must be logged in to view this page.", "danger")
         return redirect("/login")
     
-    # Fetch recipes from the database to display
-    recipes = Recipe.query.all()  # Example: adjust based on your query
+    recipes = Recipe.query.all()
     return render_template('recipes.html', recipes=recipes)
+
+@app.route('/create_recipe', methods=['GET', 'POST'])
+@login_required
+def create_recipe():
+    """Render the create recipe form and handle form submission."""
+    if request.method == 'POST':
+        title = request.form.get('title')
+        ingredients = request.form.get('ingredients')
+        instructions = request.form.get('instructions')
+        
+        if title and ingredients and instructions:
+            new_recipe = Recipe(title=title, ingredients=ingredients, instructions=instructions, user_id=g.user.id)
+            db.session.add(new_recipe)
+            db.session.commit()
+            flash("Recipe created successfully!", "success")
+            return redirect('/recipes')
+        
+        flash("All fields are required!", "danger")
+    
+    return render_template('create_recipe.html')
+
+@app.route('/favorite_recipe')
+def favorite_recipe():
+    """Render user's favorite recipes."""
+    favorite_recipes = g.user.favorite_recipes
+    return render_template('favorite_recipe.html', recipes=favorite_recipes)
+
 
 @app.context_processor
 def inject_user():
     return {'user': g.user}
 
 if __name__ == '__main__':
-    # Ensure the upload folder exists
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
     app.run(debug=True)
