@@ -29,16 +29,39 @@ class Pet(db.Model):
     age = db.Column(db.Integer, nullable=False)
     weight = db.Column(db.Float, nullable=False)
     
+class Brand(db.Model):
+    __tablename__ = 'brands'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(200))
+
+    def to_dict(self):
+        return {"id": self.id, "name": self.name, "description": self.description}
+    
 class Product(db.Model):
     __tablename__= 'product'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
-    brand = db.Column(db.String(150), nullable=False)
+    brand_id = db.Column(db.Integer, db.ForeignKey('brands.id'), nullable=False)
     rating = db.Column(db.Float, nullable=False)
     healthiness = db.Column(db.String(50), nullable = False)
     ingredients = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    brand = db.relationship('Brand', backref='products')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "brand_id": self.brand_id,
+            "rating": self.rating,
+            "healthiness": self.healthiness,
+            "ingredients": self.ingredients,
+            "created_at": self.created_at
+        }
+
 
 class Recipe(db.Model):
     __tablename__ = 'recipe'

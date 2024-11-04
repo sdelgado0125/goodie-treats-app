@@ -4,13 +4,14 @@ from flask import Flask, render_template, request, redirect, session, flash, g, 
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
 from models import connect_db, db, User, Pet, Product, Recipe, Review, Follow, FavoriteRecipe
+from api import create_api
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql:///goodie_treats')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'DEV_SECRET_KEY')
-app.config['UPLOAD_FOLDER'] = 'uploads'  # Ensure 'uploads/' exists and is writable
+app.config['UPLOAD_FOLDER'] = 'uploads'  
 
 bcrypt = Bcrypt(app)
 
