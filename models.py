@@ -16,8 +16,9 @@ class User(db.Model):
     recipes = db.relationship('Recipe', backref='author', lazy=True)
     favorite_recipes = db.relationship('Recipe', secondary='favorite_recipe', back_populates='favorited_by')
 
-    followers = db.relationship('Follow', foreign_keys='Follow.follower_id', backref='follower_user', lazy='dynamic', overlaps="follower")
-    following = db.relationship('Follow', foreign_keys='Follow.followed_id', backref='followed_user', lazy='dynamic', overlaps="followed")
+    followers = db.relationship('Follow', foreign_keys='Follow.follower_id', back_populates='follower_user', lazy='dynamic')
+    following = db.relationship('Follow', foreign_keys='Follow.followed_id', back_populates='followed_user', lazy='dynamic')
+
 class Pet(db.Model):
     __tablename__ = 'pet'
 
@@ -99,8 +100,8 @@ class Follow(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     follower_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     followed_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    follower = db.relationship('User', foreign_keys=[follower_id], overlaps="followers")
-    followed = db.relationship('User', foreign_keys=[followed_id], overlaps="following")
+    follower_user = db.relationship('User', foreign_keys=[follower_id], back_populates="followers")
+    followed_user = db.relationship('User', foreign_keys=[followed_id], back_populates="following")
     
 def connect_db(app):
     """Connect to database."""

@@ -61,17 +61,23 @@ def login():
     return render_template('login.html')
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
-    if 'username' not in session:
-        return redirect('/login')  # Redirect to login if not logged in
+    if not g.user:
+        return redirect('/login') 
     
-    username = session['username']
-    user_data = get_user_data(username)
+
+    recipes_count = Recipe.query.filter_by(user_id=g.user.id).count()
+    products_count = Product.query.count() 
+    featured_products = Product.query.order_by(Product.created_at.desc()).limit(5).all() 
     
-    return render_template('dashboard.html', username=username, 
-                           recipes_count=user_data['recipes_count'], 
-                           products_count=user_data['products_count'], 
-                           featured_products=user_data['featured_products'])
+    return render_template(
+        'dashboard.html', 
+        username=g.user.username, 
+        recipes_count=recipes_count, 
+        products_count=products_count, 
+        featured_products=featured_products
+    )
 
 
 @app.route('/logout')
@@ -93,15 +99,27 @@ def register():
         if existing_user:
             flash("Username already exists. Choose another.", "danger")
             return redirect('/register')
+        
+        existing_email = User.query.filter_by(email=email).first()
+        if existing_email:
+            flash("Email already exists. Choose another.", "danger")
+            return redirect('/register')
+        
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
         new_user = User(username=username, password=hashed_password, email=email)
         db.session.add(new_user)
         db.session.commit()
-        flash("Registration successful! Please log in.", "success")
-        return redirect('/login')
+
+
+        session['user_id'] = new_user.id
+
+        flash("Registration successful! Welcome!", "success")
+        return redirect('/user_info')  # Redirect to the /user_info route
 
     return render_template('register.html')
+
+
 
 @app.route('/user_info', methods=['GET', 'POST'])
 @login_required
@@ -160,9 +178,14 @@ def user_info():
             db.session.rollback()
             flash(f"Error updating profile: {e}", "danger")
 
-        return redirect('/homepage')
+        return redirect('/')
 
     return render_template('user_info.html')
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', user=current_user)
 
 
 @app.route('/products')

@@ -8,7 +8,7 @@
 <a href="{{ url_for('favorite_recipe') }}">Favorite Recipe</a>
 
 {% for recipe in recipes %}
-    <div>
+    <div class="recipes">
         <h2>{{ recipe.title }}</h2>
         <p>{{ recipe.ingredients }}</p>
         <p>{{ recipe.instructions }}</p>
