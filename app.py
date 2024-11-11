@@ -1,10 +1,10 @@
 import os
 from functools import wraps
-from flask import Flask, render_template, request, redirect, session, flash, g, url_for
+from flask import Flask, render_template, request, redirect, session, flash, g, jsonify
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
 from models import connect_db, db, User, Pet, Product, Recipe, Review, Follow, FavoriteRecipe
-from api import create_api
+from api.brands_api import get_brands, add_brand
 
 app = Flask(__name__)
 
@@ -16,6 +16,27 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 bcrypt = Bcrypt(app)
 
 connect_db(app)
+
+@app.route('/api/brands', methods=['GET'])
+def brands():
+    """Fetch all pet food brands"""
+    brands = get_brands()
+    return jsonify([brand.to_dict() for brand in brands])
+
+@app.route('/api/brands/<int:brand_id>', methods=['GET'])
+def brand(brand_id):
+    """Fetch a specific pet food brand by ID"""
+    brand = add_brand(brand_id)
+    if brand:
+        return jsonify(brand.to_dict())
+    else:
+        return jsonify({"error": "Brand not found"}), 404
+
+@app.before_request
+def load_logged_in_user():
+    """Loads the user if already signed in."""
+    user_id = session.get('user_id')
+    g.user = User.query.get(user_id) if user_id else None
 
 @app.before_request
 def load_logged_in_user():
@@ -183,10 +204,23 @@ def user_info():
     return render_template('user_info.html')
 
 @app.route('/profile')
-@login_required
 def profile():
-    return render_template('profile.html', user=current_user)
+    """Display user's profile information."""
+    user_id = session.get('user_id')
+    if not user_id:
+        flash("Please log in to view your profile.", "danger")
+        return redirect('/login')
+    
+    # Query the user information from the database
+    user = User.query.get(user_id)
+    if not user:
+        flash("User not found.", "danger")
+        return redirect('/')
 
+    # Query any pets associated with the user
+    pets = Pet.query.filter_by(user_id=user_id).all()
+
+    return render_template('profile.html', user=user, pets=pets)
 
 @app.route('/products')
 def product():

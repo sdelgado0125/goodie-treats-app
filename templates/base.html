@@ -15,13 +15,13 @@
 
         <nav class="nav-bar">
             <div class="navbar-left">
-                <a href="/">Home</a>
+                <a href="/dashboard">Home</a>
                 <a href="/products">Brands</a>
                 <a href="/recipes">Recipes</a>
             </div>
             <div class="navbar-right">
                 {% if user %}
-                    <a href="/dashboard"><span class="username">Hello, {{ user.username }}!</span></a>
+                    <a href="/profile"><span class="username">Hello, {{ user.username }}!</span></a>
                     <a href="/user_info">My Account</a>
                     <a href="/logout">Logout</a>
                 {% else %}

@@ -1,5 +1,7 @@
-from flask import Flask
-from api.brand_api import brand_bp
+from flask import Blueprint
 
-def create_api(app):
-    app.register_blueprint(brand_bp, url_prefix='/api')
+# Initialize the blueprint for API
+api = Blueprint('api', __name__, url_prefix='/api')
+
+# Import the routes from brands_api.py
+from .brands_api import *
