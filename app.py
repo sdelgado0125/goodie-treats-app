@@ -1,10 +1,14 @@
 import os
+import csv
 from functools import wraps
 from flask import Flask, render_template, request, redirect, session, flash, g, jsonify
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
-from models import connect_db, db, User, Pet, Product, Recipe, Review, Follow, FavoriteRecipe
+from models import connect_db, db, User, Pet, Product, Recipe, Review, Follow, FavoriteRecipe, Brand
+from csv import DictReader 
 from api.brands_api import get_brands, add_brand
+from api import api
+
 
 app = Flask(__name__)
 
@@ -16,6 +20,8 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 bcrypt = Bcrypt(app)
 
 connect_db(app)
+
+app.register_blueprint(api)
 
 @app.route('/api/brands', methods=['GET'])
 def brands():
@@ -222,9 +228,37 @@ def profile():
 
     return render_template('profile.html', user=user, pets=pets)
 
+@app.route('/populate/brands', methods=['GET'])
+@login_required
+def populate_brands():
+    if not app.config['DEBUG']:  # Only allow this route if the app is not in DEBUG mode
+        return "This route is not accessible in production.", 403  # Forbidden response
+
+    try:
+        with open('csvs/brand.csv', mode='r') as file:
+            csv_reader = csv.DictReader(file)
+            for row in csv_reader:
+                # Assuming your Brand model is set up correctly
+                brand = Brand(
+                    name=row['name'],
+                    description=row['description']
+                )
+                db.session.add(brand)
+
+            db.session.commit()  # Commit after processing all rows
+        return "Brands populated successfully!", 200  # Success response
+    except FileNotFoundError:
+        return "CSV file not found.", 404  # File not found response
+    except Exception as e:
+        # Catch any other unexpected errors and return a 500 response
+        return f"An error occurred: {str(e)}", 500
+
+
+
 @app.route('/products')
 def product():
-    return render_template('products.html')
+    brands = Brand.query.all()  # Retrieve all brands from the database
+    return render_template('products.html', brands=brands)
 
 @app.route('/recipes')
 def recipes():
