@@ -228,30 +228,7 @@ def profile():
 
     return render_template('profile.html', user=user, pets=pets)
 
-@app.route('/populate/brands', methods=['GET'])
-@login_required
-def populate_brands():
-    if not app.config['DEBUG']:  # Only allow this route if the app is not in DEBUG mode
-        return "This route is not accessible in production.", 403  # Forbidden response
 
-    try:
-        with open('csvs/brand.csv', mode='r') as file:
-            csv_reader = csv.DictReader(file)
-            for row in csv_reader:
-                # Assuming your Brand model is set up correctly
-                brand = Brand(
-                    name=row['name'],
-                    description=row['description']
-                )
-                db.session.add(brand)
-
-            db.session.commit()  # Commit after processing all rows
-        return "Brands populated successfully!", 200  # Success response
-    except FileNotFoundError:
-        return "CSV file not found.", 404  # File not found response
-    except Exception as e:
-        # Catch any other unexpected errors and return a 500 response
-        return f"An error occurred: {str(e)}", 500
 
 
 
