@@ -8,12 +8,11 @@ import csv
 def get_brands():
     """Fetch all brands from the CSV file."""
     brands = []
-    csv_path = os.path.join(os.path.dirname(__file__), '..', 'csvs', 'brand.csv')  # Adjust path as needed
+    csv_path = os.path.join(os.path.dirname(__file__), '..', 'csvs', 'brand.csv')
     try:
         with open(csv_path, newline='', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                # Validate and sanitize data
                 try:
                     row['id'] = int(row['id']) if row['id'] else None
                     row['name'] = row['name'].strip() if row['name'] else "Unknown"
@@ -21,14 +20,13 @@ def get_brands():
                     brands.append(row)
                 except Exception as e:
                     print(f"Skipping invalid row: {row}, Error: {e}")
-        return jsonify(brands)  # Return the valid brands as JSON
+        return jsonify(brands) 
     except FileNotFoundError:
         return jsonify({'error': 'brand.csv file not found'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 
-# POST route to add a new brand
 @api.route('/brands', methods=['POST'])
 def add_brand():
     """Add a new brand to the database."""
