@@ -1,7 +1,7 @@
 import os
 from flask import request, jsonify
 from . import api
-from models import Brand, db
+from models import Brand, Product, db
 import csv
 
 @api.route('/brands', methods=['GET'])
@@ -48,3 +48,16 @@ def add_brand():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+
+@api.route('/products', methods=['GET'])
+def get_products():
+    """Fetch all products from the database."""
+    products = Product.query.all()
+    return jsonify([{
+        'id': product.id,
+        'name': product.name,
+        'brand_id': product.brand_id,
+        'rating': product.rating,
+        'healthiness': product.healthiness,
+        'ingredients': product.ingredients
+    } for product in products])

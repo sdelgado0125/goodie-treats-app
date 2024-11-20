@@ -234,7 +234,7 @@ def profile():
 
 @app.route('/products')
 def product():
-    brands = Brand.query.all()  # Retrieve all brands from the database
+    brands = Brand.query.options(db.joinedload(Brand.products)).all()
     return render_template('products.html', brands=brands)
 
 @app.route('/recipes')
@@ -244,7 +244,7 @@ def recipes():
         flash("You must be logged in to view this page.", "danger")
         return redirect("/login")
     
-    recipes = Recipe.query.all()
+    recipes = Recipe. query.all()
     return render_template('recipes.html', recipes=recipes)
 
 @app.route('/create_recipe', methods=['GET', 'POST'])

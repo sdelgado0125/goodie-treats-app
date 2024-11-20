@@ -190,3 +190,87 @@ main {
 .login-link a:hover {
     text-decoration: underline;
 }
+
+.brands-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Individual brand card styling */
+.brand-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 30%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+/* Hover effect on brand cards */
+.brand-card:hover {
+    transform: scale(1.05);
+}
+
+/* Styling for the brand name */
+.brand-card h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Styling for the brand description */
+.brand-card p {
+    font-size: 1em;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Product list within brand card */
+.products-list {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* Header for product list */
+.products-list h3 {
+    font-size: 1.2em;
+    color: #4CAF50;
+    margin-bottom: 10px;
+}
+
+/* Individual product card styling */
+.product-card {
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+/* Hover effect on product cards */
+.product-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Product name styling */
+.product-card h4 {
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* Product details styling */
+.product-card p {
+    font-size: 0.9em;
+    color: #555;
+    line-height: 1.4;
+    margin: 5px 0;
+}

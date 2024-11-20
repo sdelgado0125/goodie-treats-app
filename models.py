@@ -53,7 +53,7 @@ class Product(db.Model):
     name = db.Column(db.String(150), nullable=False)
     brand_id = db.Column(db.Integer, db.ForeignKey('brands.id'), nullable=False)
     rating = db.Column(db.Float, nullable=False)
-    healthiness = db.Column(db.String(50), nullable = False)
+    healthiness = db.Column(db.String(150), nullable = False)
     ingredients = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
