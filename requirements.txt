@@ -3,3 +3,4 @@ Flask-SQLAlchemy
 Flask-Bcrypt
 Flask-DebugToolbar
 psycopg2-binary
+gunicorn==23.0.0
