@@ -3,8 +3,31 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+<div class="dashboard-container">
+    <h1>Welcome, {{ username }}!</h1>
+    
+    <div class="dashboard-panels">
+        <div class="panel">
+            <h2>Your Recipes</h2>
+            <p>Total Recipes: {{ recipes_count }}</p>
+            <a href="/recipes">View Recipes</a>
+        </div>
 
-    <h1>Heres Your Dashboard</h1>
+        <div class="panel">
+            <h2>Products Overview</h2>
+            <p>Total Products: {{ products_count }}</p>
+            <a href="/products">View Products</a>
+        </div>
 
+        <div class="panel">
+            <h2>Featured Products</h2>
+            <ul>
+                {% for product in featured_products %}
+                    <li>{{ product.name }} ({{ product.created_at.strftime('%Y-%m-%d') }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

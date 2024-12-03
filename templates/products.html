@@ -5,29 +5,39 @@
 {% block content %}
 <div class="container">
     <h1>Brands</h1>
+    
+    <form method="GET" action="{{ url_for('product') }}" class="search-form">
+        <input type="text" name="query" value="{{ query or '' }}" placeholder="Search for a brand" class="form-control">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    
     <div class="brands-list">
-        {% for brand in brands %}
-            <div class="brand-card">
-                <h2>{{ brand.name }}</h2>
-                <p>{{ brand.description }}</p>
-                
-                {% if brand.products %}
-                <div class="products-list">
-                    <h3>Products:</h3>
-                    {% for product in brand.products %}
-                        <div class="product-card">
-                            <h4>{{ product.name }}</h4>
-                            <p><strong>Rating:</strong> {{ product.rating }}</p>
-                            <p><strong>Healthiness:</strong> {{ product.healthiness }}</p>
-                            <p><strong>Ingredients:</strong> {{ product.ingredients }}</p>
-                        </div>
-                    {% endfor %}
+        {% if brands %}
+            {% for brand in brands %}
+                <div class="brand-card">
+                    <h2>{{ brand.name }}</h2>
+                    <p>{{ brand.description }}</p>
+                    
+                    {% if brand.products %}
+                    <div class="products-list">
+                        <h3>Products:</h3>
+                        {% for product in brand.products %}
+                            <div class="product-card">
+                                <h4>{{ product.name }}</h4>
+                                <p><strong>Rating:</strong> {{ product.rating }}</p>
+                                <p><strong>Healthiness:</strong> {{ product.healthiness }}</p>
+                                <p><strong>Ingredients:</strong> {{ product.ingredients }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p>No products available for this brand.</p>
+                    {% endif %}
                 </div>
-                {% else %}
-                <p>No products available for this brand.</p>
-                {% endif %}
-            </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            <p>No brands found matching "{{ query }}".</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

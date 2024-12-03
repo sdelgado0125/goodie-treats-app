@@ -83,7 +83,7 @@ def login():
             flash("Welcome back!", "success")
             return redirect("/homepage")
         else:
-            flash("Invalid username or password.", "danger")  # This flashes an error message
+            flash("Invalid username or password.", "danger") 
 
     return render_template('login.html')
 
@@ -231,11 +231,17 @@ def profile():
 
 
 
-
 @app.route('/products')
 def product():
-    brands = Brand.query.options(db.joinedload(Brand.products)).all()
-    return render_template('products.html', brands=brands)
+    query = request.args.get('query')
+    
+    if query:
+        brands = Brand.query.filter(Brand.name.ilike(f"%{query}%")).options(db.joinedload(Brand.products)).all()
+    else:
+        brands = Brand.query.options(db.joinedload(Brand.products)).all()
+    
+    return render_template('products.html', brands=brands, query=query)
+
 
 @app.route('/recipes')
 def recipes():

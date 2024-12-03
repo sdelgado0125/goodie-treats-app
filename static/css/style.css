@@ -5,7 +5,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -13,13 +13,12 @@ body {
 .site-header {
     display: flex;
     align-items: center;  
-    justify-content: space-between;  
     padding: 10px 0;
     border-bottom: 2px solid #ddd;
 }
 
 .logo {
-    width: 200px;
+    width: 150px;
     height: auto;
 }
 
@@ -195,7 +194,7 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 5px;
+    gap: 10px;
 }
 
 .brand-card {
@@ -263,4 +262,67 @@ main {
     color: #555;
     line-height: 1.4;
     margin: 5px 0;
+}
+
+.search-form {
+    display: flex;
+    margin-bottom: 20px;
+}
+.search-form .form-control {
+    width: 300px;
+    margin-right: 10px;
+}
+
+.dashboard-container {
+    text-align: center;
+    padding: 20px;
+}
+.dashboard-panels {
+    display: flex;
+    justify-content: space-around;
+}
+.panel {
+    background-color: #f4f4f4;
+    padding: 20px;
+    width: 30%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+.panel a {
+    text-decoration: none;
+    color: #007BFF;
+    display: block;
+    margin-top: 10px;
+}
+
+.recipes-container {
+    display: grid;
+    gap: 20px;                             /* Space between quadrants */
+    margin: 20px 0;
+}
+
+.recipe-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    text-align: center;
+}
+
+.recipe-card:hover {
+    transform: scale(1.05);
+}
+
+.recipe-card h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.recipe-card p {
+    font-size: 1em;
+    color: #666;
+    line-height: 1.4;
 }
