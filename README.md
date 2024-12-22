@@ -52,30 +52,60 @@ This project was built using the following technologies:
    cd goodie-treats
    ```
 
-2. **Set Up a Virtual Environment (Optional but Recommended)**
+2. **Run the Installation Script **
+
+To simplify the setup process, you can run the setup_render.sh script, which will handle the environment setup, dependency installation, and database initialization for you.
+
+Make the script executable and run it:
 
 ```bash
+chmod +x setup_render.sh
+./setup_render.sh
+```
+This script will:
+
+Clone the repository (if not already cloned)
+Set up a virtual environment (if not already set up)
+Install the required dependencies from requirements.txt
+Prompt you to set up your DATABASE_URL environment variable for database configuration
+Initialize the database (if not already initialized) via a route in the app
+Provide additional instructions for Render deployment (if you're deploying on Render)
+
+3. **Set Up a Virtual Environment**
+
+If you prefer to set up the environment manually, you can follow these steps:
+Create a Virtual Environment
+```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+Activate the Virtual Environment
+On macOS/Linux:
+```bash
+source venv/bin/activate
+```
+On Windows:
+```bash
+venv\Scripts\activate
 ```
 
-3. **Install Dependencies**
+4. **Install Dependencies**
+
+Install the required dependencies for the project:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Set Up Environment Variables**
+5. **Set Up Environment Variables**
 
-```bash
 Set the DATABASE_URL environment variable to configure the database connection. For example:
 
+```bash
 export DATABASE_URL='postgresql://username:password@localhost/goodie_treats'
-
-Replace username, password, and localhost/goodie_treats with your actual database details.
 ```
+Note: Replace username, password, and localhost/goodie_treats with your actual database credentials.
 
-5. **Initialize the Database**
+6. **Initialize the Database**
 
 
 Run the following commands to create the tables if they don’t already exist:
