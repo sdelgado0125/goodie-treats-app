@@ -10,8 +10,8 @@ This project was created using Flask, SQLAlchemy, and Python and is hosted on Re
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Installation Instructions](#installation-instructions)
-- [Contributing](#contributing)
+- [Setup and Usage](#Setup-and-Usage)
+- [Project Schema](#Project-Schema)
 - [License](#license)
 - [Contact](#contact)
 
@@ -43,90 +43,67 @@ This project was built using the following technologies:
 
 ---
 
-## Installation Instructions
+## Setup and Usage
 
-1. **Clone the repository:**
+Running the Flask Application Locally
+To run the Flask application locally, follow these steps:
 
-   ```bash
-   git clone https://github.com/sdelgado0125/goodie-treats.git
-   cd goodie-treats
-   ```
+Clone the Repository
 
-2. **Run the Installation Script **
-
-To simplify the setup process, you can run the setup_render.sh script, which will handle the environment setup, dependency installation, and database initialization for you.
-
-Make the script executable and run it:
-
-```bash
-chmod +x setup_render.sh
-./setup_render.sh
 ```
-This script will:
-
-Clone the repository (if not already cloned)
-Set up a virtual environment (if not already set up)
-Install the required dependencies from requirements.txt
-Prompt you to set up your DATABASE_URL environment variable for database configuration
-Initialize the database (if not already initialized) via a route in the app
-Provide additional instructions for Render deployment (if you're deploying on Render)
-
-3. **Set Up a Virtual Environment**
-
-If you prefer to set up the environment manually, you can follow these steps:
+bash
+git clone https://github.com/your-username/goodie-treats.git
+cd goodie-treats
 Create a Virtual Environment
-```bash
-python -m venv venv
-```
-Activate the Virtual Environment
-On macOS/Linux:
-```bash
-source venv/bin/activate
-```
-On Windows:
-```bash
-venv\Scripts\activate
 ```
 
-4. **Install Dependencies**
+```
+bash
 
-Install the required dependencies for the project:
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-```bash
+Install Dependencies
+
+```
+bash
+
 pip install -r requirements.txt
+Set Environment Variables
+```
+Create a .env file and include your environment-specific variables. At a minimum, set the following:
+
+makefile
+```
+FLASK_APP=app.py
+FLASK_ENV=development
+SECRET_KEY=your_secret_key
 ```
 
-5. **Set Up Environment Variables**
+Run the Application
 
-Set the DATABASE_URL environment variable to configure the database connection. For example:
-
-```bash
-export DATABASE_URL='postgresql://username:password@localhost/goodie_treats'
 ```
-Note: Replace username, password, and localhost/goodie_treats with your actual database credentials.
-
-6. **Initialize the Database**
-
-
-Run the following commands to create the tables if they don’t already exist:
-```bash
-from app import db
-db.create_all()
-```
-Alternatively, you can add a route to your app for database initialization:
-```bash
-@app.route('/initialize-db')
-def initialize_db():
-    db.create_all()
-    return "Database initialized successfully!"
-```
-Navigate to http://127.0.0.1:5000/initialize-db in your browser to trigger this function.
-
-6. **Run the App**
-
-```bash
+bash
 flask run
 ```
+Visit http://127.0.0.1:5000 in your browser to access the application.
+
+Using the Setup Script
+The project includes a setup_render.sh script to streamline the setup process. Follow these steps to use the script:
+
+1. Make the Script Executable
+```
+bash
+chmod +x setup_render.sh
+```
+2. Run the Script
+```
+bash
+./setup_render.sh
+```
+The script performs the necessary setup for running the application on Render.
+
 
 ## Project Schema
 
