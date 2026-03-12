@@ -65,9 +65,9 @@ def seed_brands():
 
                 brand = Brand(
                     name=name,
-                    description=description or "No description available",
-                    rating=rating or 0
+                    description=description or "No description available"
                 )
+
                 db.session.add(brand)
                 count += 1
 
