@@ -4,6 +4,9 @@ Goodie Treats is a web-based platform that helps pet owners find the best food p
 
 This project was created using Flask, SQLAlchemy, and Python and is hosted on Render.
 
+## Live Demo
+https://goodie-treats-app.onrender.com
+
 ---
 
 ## Table of Contents
@@ -25,6 +28,11 @@ This project was created using Flask, SQLAlchemy, and Python and is hosted on Re
 - **Product Ratings:** Users can rate pet food products and see others’ reviews.
 - **Admin Panel:** Admins can manage the content (e.g., products, recipes).
 - **Responsive Design:** The app works seamlessly on mobile devices and desktops.
+
+---
+
+## Screenshots
+
 
 ---
 
