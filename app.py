@@ -37,6 +37,46 @@ def brand(brand_id):
         return jsonify(brand.to_dict())
     else:
         return jsonify({"error": "Brand not found"}), 404
+    
+@app.route('/seed_brands')
+def seed_brands():
+    import csv
+    import os
+    from models import Brand, db
+
+    csv_path = os.path.join(os.path.dirname(__file__), 'csvs', 'brand.csv')
+
+    try:
+        with open(csv_path, newline='', encoding='utf-8') as csvfile:
+            reader = csv.DictReader(csvfile)
+            count = 0
+
+            for row in reader:
+                name = row.get('name', '').strip()
+                description = row.get('description', '').strip()
+                rating = row.get('rating', 0)
+
+                if not name:
+                    continue
+
+                # Avoid duplicates
+                if Brand.query.filter_by(name=name).first():
+                    continue
+
+                brand = Brand(
+                    name=name,
+                    description=description or "No description available",
+                    rating=rating or 0
+                )
+                db.session.add(brand)
+                count += 1
+
+            db.session.commit()
+            return f"Seeded {count} brands successfully!"
+
+    except Exception as e:
+        return f"Error: {e}", 500
+
 
 @app.before_request
 def load_logged_in_user():
